@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from 'axios'
-import { CallbackQuery, Message, Opts, Telegram, ApiResponse } from 'typegram'
+import { ApiResponse, CallbackQuery, Message, Opts, Telegram } from 'typegram'
 import { AppConfig } from './config'
 import { Offers } from './offers'
 import {
@@ -128,7 +128,9 @@ export class Bot {
 
     const offer = await this.#offers.findById(offerId)
 
-    if (!offer || offer.status !== 'pending')
+    if (!offer) return ANSWER_CALLBACK_QUERY_METHOD(queryId, `vaga #${offerId} não encontrada`)
+
+    if (offer.status !== 'pending')
       return ANSWER_CALLBACK_QUERY_METHOD(queryId, 'vaga inválida ou já revisada')
 
     if (action === 'approve') {

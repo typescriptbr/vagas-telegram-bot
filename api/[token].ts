@@ -11,6 +11,7 @@ type TextMessageUpdate = Update.MessageUpdate & { message: Message.TextMessage }
 
 const isCallbackQuery = (
   update: any
+  // eslint-disable-next-line camelcase -- callback_query comes from the API, we're just declaring it here
 ): update is Update.CallbackQueryUpdate & { callback_query: CallbackQuery.DataCallbackQuery } => {
   return update.callback_query !== undefined && update.callback_query.data !== undefined
 }
