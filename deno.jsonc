@@ -1,11 +1,16 @@
 {
   "$schema": "https://deno.land/x/deno/cli/schemas/config-file.v1.json",
   "importMap": "./import_map.json",
+  "lint": {
+    "rules": {
+      "exclude": ["require-await"]
+    }
+  },
   "fmt": {
     "options": {
       "indentWidth": 2,
       "proseWrap": "preserve",
-      "lineWidth": 100,
+      "lineWidth": 120,
       "singleQuote": true,
       "useTabs": false
     },
