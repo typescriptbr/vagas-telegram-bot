@@ -1,0 +1,17 @@
+{
+  "deno.enable": true,
+  "deno.unstable": true,
+  "deno.lint": true,
+  "deno.suggest.autoImports": true,
+  "typescript.validate.enable": false,
+  "deno.suggest.completeFunctionCalls": true,
+  "deno.importMap": "./import_map.json",
+  "[typescript]": {
+    "editor.defaultFormatter": "denoland.vscode-deno",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll": true,
+      "source.organizeImports": true
+    }
+  }
+}
