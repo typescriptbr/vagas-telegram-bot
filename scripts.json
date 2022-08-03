@@ -1,0 +1,14 @@
+{
+  "$schema": "https://deno.land/x/denon@2.5.0/schema.json",
+  "scripts": {
+    "start": {
+      "cmd": "deno run src/index.ts",
+      "desc": "run the bot file",
+      "allow": {
+        "read": ".env,.env.defaults",
+        "net": true,
+        "env": true
+      }
+    }
+  }
+}

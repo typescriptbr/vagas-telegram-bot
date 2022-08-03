@@ -1,0 +1,21 @@
+{
+  "$schema": "https://deno.land/x/deno/cli/schemas/config-file.v1.json",
+  "importMap": "./import_map.json",
+  "fmt": {
+    "options": {
+      "indentWidth": 2,
+      "proseWrap": "preserve",
+      "lineWidth": 100,
+      "singleQuote": true,
+      "useTabs": false
+    },
+    "files": {
+      "exclude": [
+        "./node_modules/"
+      ]
+    }
+  },
+  "compilerOptions": {
+    "strict": true
+  }
+}
