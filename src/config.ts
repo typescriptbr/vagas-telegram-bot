@@ -1,11 +1,18 @@
-import env from 'sugar-env'
+import "x/dotenv@v3.2.0/load.ts";
 
-export const config = {
-  groupId: env.get('GROUP_ID', ''),
-  channelId: env.get('CHANNEL_ID', ''),
-  telegramToken: env.get('TELEGRAM_TOKEN', ''),
-  adminGroupId: env.get('ADMIN_GROUP_ID', ''),
-  dbUri: env.get('DB_URI', 'mongodb://localhost:27017')
+function required(name: string) {
+  const env = Deno.env.get(name);
+  if (!env) throw new Error(`Environment variable ${name} is required`);
+  return env;
 }
 
-export type AppConfig = typeof config
+export const config = {
+  groupId: required("GROUP_ID"),
+  channelId: required("CHANNEL_ID"),
+  telegramToken: required("TELEGRAM_TOKEN"),
+  telegramSecret: required("TELEGRAM_SECRET"),
+  adminGroupId: required("ADMIN_GROUP_ID"),
+  dbUri: required("DB_URI"),
+};
+
+export type AppConfig = typeof config;
