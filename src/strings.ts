@@ -1,5 +1,8 @@
-import { Offer } from './offers'
-import { stripIndent, safeHtml } from 'common-tags'
+import { Offer } from './offers.ts'
+import {
+  stripIndent,
+  safeHtml
+} from 'https://cdn.esm.sh/v86/common-tags@1.8.0/deno/common-tags.js?dts'
 
 export const OFFER_CREATED = (id: string) =>
   `Vaga #${id} criada! Te aviso por aqui quando ela for aprovada e postada no canal :)`
@@ -55,7 +58,7 @@ export const NEW_OFFER = (offer: Offer) => stripIndent(safeHtml)`
   #${offer._id.toHexString()}
 `
 
-export const APPROVE_BUTTON = 'Aprovar ✔️'
+export const APPROVE_BUTTON = 'Aprovar ✅'
 export const REJECT_BUTTON = 'Rejeitar ❌'
 
 export const HELP = stripIndent`
@@ -78,8 +81,8 @@ export const CHANNEL_POST = (offer: Offer) => stripIndent(safeHtml)`
   #${offer._id.toHexString()}
 `
 
-export const CHANNEL_POST_URL = (username: string, messageId: number) =>
-  safeHtml`https://t.me/${username}/${messageId}`
+export const CHANNEL_POST_URL = (channelId: string, messageId: number) =>
+  safeHtml`https://t.me/${channelId}/${messageId}`
 
 export const GROUP_POST = (postUrl: string) =>
   safeHtml`Tem [vaga nova](${postUrl}) no @typescriptbr_vagas, galera! :D`
