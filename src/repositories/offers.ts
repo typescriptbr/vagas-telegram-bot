@@ -1,11 +1,11 @@
-import { ObjectId, Collection, Database } from "x/mongo@v0.31.0/mod.ts";
+import { Collection, Database, ObjectId } from 'x/mongo@v0.31.0/mod.ts';
 
 export type Offer = {
   _id: ObjectId;
   authorId: number;
   authorName: string;
   text: string;
-  status: "pending" | "approved" | "rejected";
+  status: 'pending' | 'approved' | 'rejected';
   statusSetBy: null | number;
   createdAt: Date;
 };
@@ -14,19 +14,19 @@ export class Offers {
   #collection: Collection<Offer>;
 
   constructor(db: Database) {
-    this.#collection = db.collection("offers");
+    this.#collection = db.collection('offers');
   }
 
   async create(
     authorId: number,
     authorName: string,
-    text: string
+    text: string,
   ): Promise<Offer> {
-    const offer: Omit<Offer, "_id"> = {
+    const offer: Omit<Offer, '_id'> = {
       authorId,
       authorName,
       text,
-      status: "pending",
+      status: 'pending',
       statusSetBy: null,
       createdAt: new Date(),
     };
@@ -46,14 +46,14 @@ export class Offers {
   async approve(id: string, userId: number): Promise<void> {
     await this.#collection.updateOne(
       { _id: new ObjectId(id) },
-      { $set: { status: "approved", statusSetBy: userId } }
+      { $set: { status: 'approved', statusSetBy: userId } },
     );
   }
 
   async reject(id: string, userId: number): Promise<void> {
     await this.#collection.updateOne(
       { _id: new ObjectId(id) },
-      { $set: { status: "rejected", statusSetBy: userId } }
+      { $set: { status: 'rejected', statusSetBy: userId } },
     );
   }
 }

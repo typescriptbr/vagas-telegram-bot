@@ -1,7 +1,7 @@
 {
   "$schema": "https://deno.land/x/denon@2.5.0/schema.json",
   "scripts": {
-    "polling": {
+    "dev": {
       "cmd": "deno run src/polling.ts",
       "desc": "runs the bot on long polling mode",
       "allow": {
@@ -10,7 +10,7 @@
         "env": true
       }
     },
-    "server": {
+    "start": {
       "cmd": "deno run src/server.ts",
       "desc": "runs the bot on webhook mode",
       "allow": {

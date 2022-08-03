@@ -2,7 +2,7 @@ import { Bot, Context } from 'grammy';
 import { MongoClient } from 'x/mongo@v0.31.0/mod.ts';
 import { parseMode } from 'x/parse_mode@0.1.3/mod.ts';
 
-import { approveOffer, createOffer, forwardOffer, rejectOffer, start } from './handlers/handlers.ts';
+import { approveOffer, createOffer, forwardOffer, forwardOfferAdmin, rejectOffer, start } from './handlers/handlers.ts';
 import { Offers } from './repositories/offers.ts';
 import type { AppConfig } from './utils/config.ts';
 import { isAdmin, isGroup, isntAdmin } from './utils/predicates.ts';
@@ -56,13 +56,14 @@ export async function getBot(config: AppConfig) {
     .filter((ctx) => ctx.chat!.type === 'private')
     .command('help', (ctx) => ctx.reply(HELP));
 
-  // bot
-  //   .filter((ctx) => ctx.chat!.type === 'group' && channelAdmins.has(ctx.from!.id))
-  //   .command('vaga', forwardOfferAdmins);
+  bot
+    .filter(isGroup)
+    .filter(isAdmin(groupAdmins))
+    .command('vaga', forwardOfferAdmin);
 
   bot
     .filter(isGroup)
-    // .filter(isntAdmin(groupAdmins))
+    .filter(isntAdmin(groupAdmins))
     .command('vaga', forwardOffer);
 
   bot.command('id', (ctx) => ctx.reply(`chat: ${ctx.chat.id}, from: ${ctx.message?.from.id}`));

@@ -98,6 +98,13 @@ export const FORWARDED_OFFER = (offer: Offer) =>
     Se quiser acompanhar o status da aprovação, clica no botão aqui em baixo.
   `;
 
+export const FORWARDED_OFFER_ADMIN = (offer: Offer, channelUrl: string) =>
+  stripIndent`
+    Oi, <a href="tg://user?id=${offer.authorId}">${offer.authorName}</a>. Vi que você postou uma vaga, mas temos um <a href="${config.offerRulesUrl}">fluxo específico</a> pra isso aqui no canal.
+
+    Essa que você postou já foi postada lá <a href="${channelUrl}">no canal</a>, mas das próximas vezes me envia ela no privado, seguindo o fluxo certinho, por favor :)
+`;
+
 export const STATUS = (status: Offer['status']) =>
   status === 'pending' ? 'Aguardando aprovação' : status === 'approved' ? 'Aprovada' : 'Rejeitada';
 
