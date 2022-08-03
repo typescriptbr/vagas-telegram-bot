@@ -86,3 +86,12 @@ export const CHANNEL_POST_URL = (channelId: string, messageId: number) =>
 
 export const GROUP_POST = (postUrl: string) =>
   safeHtml`Tem [vaga nova](${postUrl}) no @typescriptbr_vagas, galera! :D`
+
+export const FORWARDED_OFFER = (
+  offer: Offer,
+  channelId: string,
+  forwardedMessageId: string
+) =>
+  stripIndent(safeHtml)`
+    Oi,
+  `;
