@@ -18,6 +18,16 @@
         "net": true,
         "env": true
       }
+    },
+    "set-webhook": {
+      "cmd": "deno run set-webhook.ts",
+      "desc": "sets the bot webhook url to the given url",
+      "watch": false,
+      "allow": {
+        "net": true,
+        "env": true,
+        "read": ".env,.env.defaults,.env.example"
+      }
     }
   }
 }
