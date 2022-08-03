@@ -1,48 +1,34 @@
-import { MongoClient } from 'x/mongo@v0.31.0/mod.ts'
-import { parseMode } from 'x/parse_mode@0.1.3/mod.ts'
-import { Bot, Context } from 'grammy'
+import { Bot, Context } from 'grammy';
+import { MongoClient } from 'x/mongo@v0.31.0/mod.ts';
+import { parseMode } from 'x/parse_mode@0.1.3/mod.ts';
 
-import type { AppConfig } from './config.ts'
-import { Offers } from './offers.ts'
-import { createOffer } from './handlers/create-offer.ts'
-import { approveOffer } from './handlers/approve-offer.ts'
-import { rejectOffer } from './handlers/reject-offer.ts'
-import { HELP } from './strings.ts'
-import { forwardOffer } from "./handlers/forward-offer.ts";
+import { approveOffer, createOffer, forwardOffer, rejectOffer, start } from './handlers/handlers.ts';
+import { Offers } from './repositories/offers.ts';
+import type { AppConfig } from './utils/config.ts';
+import { isAdmin, isGroup, isntAdmin } from './utils/predicates.ts';
+import { HELP } from './utils/strings.ts';
 
 export type AppContext = Context & {
   repositories: {
     offers: Offers;
   };
-  sendToAdmins: Context["reply"];
+  sendToAdmins: Context['reply'];
   config: AppConfig;
 };
 
 export async function getBot(config: AppConfig) {
   const bot = new Bot<AppContext>(config.telegramToken);
-  bot.api.config.use(parseMode("HTML"));
+  bot.api.config.use(parseMode('HTML'));
 
   const client = new MongoClient();
   const connection = await client.connect(config.dbUri);
 
   // Add channel administrator list
-  const channelAdmins = await bot.api
+  const groupAdmins = await bot.api
     .getChatAdministrators(config.groupId)
+    .catch(() => [])
     .then((admins) => admins.map((admin) => admin.user.id))
     .then((ids) => new Set(ids));
-
-  // Adds a new administrator to the administrator list in case we add a new one
-  // Remove if we remove an administrator
-  bot.on("chat_member", (ctx) => {
-    if (
-      ["administrator", "creator"].includes(
-        ctx.update.chat_member.new_chat_member.status
-      )
-    )
-      return channelAdmins.add(ctx.update.chat_member.new_chat_member.user.id);
-
-    return channelAdmins.delete(ctx.update.chat_member.new_chat_member.user.id);
-  });
 
   bot.use((ctx, next) => {
     ctx.repositories = {
@@ -51,32 +37,39 @@ export async function getBot(config: AppConfig) {
 
     ctx.config = config;
 
-    ctx.sendToAdmins = (text, other) => {
-      return ctx.api.sendMessage(config.adminGroupId, text, other);
-    };
+    ctx.sendToAdmins = (text, other) => ctx.api.sendMessage(config.adminGroupId, text, other);
 
     next();
   });
 
-  bot
-    .filter((ctx) => ctx.chat!.type === "private")
-    .command("help", (ctx) => ctx.reply(HELP));
+  // Adds an administrator to the administrator list in case we add one
+  bot.filter(isGroup).filter(isAdmin(groupAdmins)).on('chat_member', (ctx) => {
+    groupAdmins.add(ctx.chatMember.new_chat_member.user.id);
+  });
+
+  // Removes an administrator from the administrator list in case we remove one
+  bot.filter(isGroup).filter(isntAdmin(groupAdmins)).on('chat_member', (ctx) => {
+    groupAdmins.delete(ctx.chatMember.new_chat_member.user.id);
+  });
 
   bot
-    .filter(
-      (ctx) => ctx.chat!.type === "group" && channelAdmins.has(ctx.from!.id)
-    )
-    .command("vaga", forwardOfferAdmins);
+    .filter((ctx) => ctx.chat!.type === 'private')
+    .command('help', (ctx) => ctx.reply(HELP));
+
+  // bot
+  //   .filter((ctx) => ctx.chat!.type === 'group' && channelAdmins.has(ctx.from!.id))
+  //   .command('vaga', forwardOfferAdmins);
 
   bot
-    .filter(
-      (ctx) => ctx.chat!.type === "group" && !channelAdmins.has(ctx.from!.id)
-    )
-    .command("vaga", forwardOffer);
+    .filter(isGroup)
+    // .filter(isntAdmin(groupAdmins))
+    .command('vaga', forwardOffer);
 
+  bot.command('id', (ctx) => ctx.reply(`chat: ${ctx.chat.id}, from: ${ctx.message?.from.id}`));
   bot.hears(/#tsbrvagas/, createOffer);
   bot.callbackQuery(/approve-(.*)/, approveOffer);
   bot.callbackQuery(/reject-(.*)/, rejectOffer);
+  bot.command('start', start);
 
   return bot;
 }
