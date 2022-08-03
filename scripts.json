@@ -5,7 +5,7 @@
       "cmd": "deno run src/polling.ts",
       "desc": "runs the bot on long polling mode",
       "allow": {
-        "read": ".env,.env.defaults",
+        "read": ".env,.env.defaults,.env.example",
         "net": true,
         "env": true
       }
@@ -14,7 +14,7 @@
       "cmd": "deno run src/server.ts",
       "desc": "runs the bot on webhook mode",
       "allow": {
-        "read": ".env,.env.defaults",
+        "read": ".env,.env.defaults,.env.example",
         "net": true,
         "env": true
       }
