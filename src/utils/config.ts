@@ -1,6 +1,6 @@
-import { config as loadConfig } from 'x/dotenv@v3.2.0/mod.ts';
+import { config as loadConfig } from 'deno/dotenv/mod.ts';
 
-const envs = loadConfig({ safe: true });
+const envs = await loadConfig({ safe: true });
 
 export const config = {
   groupId: envs['GROUP_ID'],
