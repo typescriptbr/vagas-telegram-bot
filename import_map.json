@@ -2,6 +2,7 @@
   "imports": {
     "x/": "https://deno.land/x/",
     "deno/": "https://deno.land/std@0.150.0/",
-    "grammy": "https://deno.land/x/grammy@v1.10.1/mod.ts"
+    "grammy": "https://deno.land/x/grammy@v1.10.1/mod.ts",
+    "http://cdn.esm.sh/v89/common-tags@1.8.0/deno/common-tags.js": "https://cdn.esm.sh/v89/common-tags@1.8.0/deno/common-tags.js"
   }
 }
