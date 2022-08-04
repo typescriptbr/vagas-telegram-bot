@@ -2,6 +2,7 @@ import { CommandMiddleware, InlineKeyboard } from 'grammy';
 import { AppContext } from '../bot.ts';
 import { requestApproval } from '../utils/request-approval.ts';
 import { FORWARDED_OFFER } from '../utils/strings.ts';
+const noop = () => {};
 
 export const forwardOffer: CommandMiddleware<AppContext> = async (ctx) => {
   if (!ctx.message) return;
@@ -32,10 +33,11 @@ export const forwardOffer: CommandMiddleware<AppContext> = async (ctx) => {
     `https://t.me/${ctx.me.username}?start=${offer._id.toHexString()}`,
   );
 
+  await requestApproval(ctx, offer);
+  await ctx.reply(FORWARDED_OFFER(offer), { reply_markup: keyboard, disable_web_page_preview: true });
+
   await Promise.all([
-    ctx.reply(FORWARDED_OFFER(offer), { reply_markup: keyboard, disable_web_page_preview: true }),
-    ctx.deleteMessage(),
-    ctx.api.deleteMessage(originalMessage.chat.id, originalMessage.message_id),
-    requestApproval(ctx, offer),
+    ctx.deleteMessage().catch(noop),
+    ctx.api.deleteMessage(originalMessage.chat.id, originalMessage.message_id).catch(noop),
   ]);
 };

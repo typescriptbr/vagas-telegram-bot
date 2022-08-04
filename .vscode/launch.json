@@ -1,0 +1,24 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "request": "launch",
+      "name": "Launch Program",
+      "type": "pwa-node",
+      "program": "${workspaceFolder}/src/polling.ts",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "/home/roziscoding/.asdf/shims/deno",
+      "runtimeArgs": [
+        "run",
+        "--unstable",
+        "--inspect",
+        "--allow-all"
+      ],
+      "envFile": "${workspaceFolder}/.envrc",
+      "attachSimplePort": 9229
+    }
+  ]
+}

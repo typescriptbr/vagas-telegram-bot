@@ -14,6 +14,7 @@ export type AppContext = Context & {
   };
   sendToAdmins: Context['reply'];
   config: AppConfig;
+  admins: Set<number>;
 };
 
 export async function getBot(config: AppConfig) {
@@ -31,6 +32,8 @@ export async function getBot(config: AppConfig) {
     .then((ids) => new Set(ids));
 
   bot.use((ctx, next) => {
+    ctx.admins = groupAdmins;
+
     ctx.repositories = {
       offers: new Offers(connection),
     };
@@ -43,12 +46,12 @@ export async function getBot(config: AppConfig) {
   });
 
   // Adds an administrator to the administrator list in case we add one
-  bot.filter(isGroup).filter(isAdmin(groupAdmins)).on('chat_member', (ctx) => {
+  bot.filter(isGroup).filter(isAdmin).on('chat_member', (ctx) => {
     groupAdmins.add(ctx.chatMember.new_chat_member.user.id);
   });
 
   // Removes an administrator from the administrator list in case we remove one
-  bot.filter(isGroup).filter(isntAdmin(groupAdmins)).on('chat_member', (ctx) => {
+  bot.filter(isGroup).filter(isntAdmin).on('chat_member', (ctx) => {
     groupAdmins.delete(ctx.chatMember.new_chat_member.user.id);
   });
 
@@ -58,12 +61,12 @@ export async function getBot(config: AppConfig) {
 
   bot
     .filter(isGroup)
-    .filter(isAdmin(groupAdmins))
+    .filter(isAdmin)
     .command('vaga', forwardOfferAdmin);
 
   bot
     .filter(isGroup)
-    .filter(isntAdmin(groupAdmins))
+    .filter(isntAdmin)
     .command('vaga', forwardOffer);
 
   bot.command('id', (ctx) => ctx.reply(`chat: ${ctx.chat.id}, from: ${ctx.message?.from.id}`));

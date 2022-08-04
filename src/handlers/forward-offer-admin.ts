@@ -1,6 +1,7 @@
 import { CommandMiddleware } from 'grammy';
 import { AppContext } from '../bot.ts';
 import { CHANNEL_POST, CHANNEL_POST_URL, FORWARDED_OFFER_ADMIN } from '../utils/strings.ts';
+const noop = () => {};
 
 export const forwardOfferAdmin: CommandMiddleware<AppContext> = async (ctx) => {
   if (!ctx.message) return;
@@ -34,7 +35,7 @@ export const forwardOfferAdmin: CommandMiddleware<AppContext> = async (ctx) => {
     ctx.reply(FORWARDED_OFFER_ADMIN(offer, CHANNEL_POST_URL(ctx.config.channelId, channelMessage.message_id)), {
       disable_web_page_preview: true,
     }),
-    ctx.deleteMessage(),
-    ctx.api.deleteMessage(originalMessage.chat.id, originalMessage.message_id),
+    ctx.deleteMessage().catch(noop),
+    ctx.api.deleteMessage(originalMessage.chat.id, originalMessage.message_id).catch(noop),
   ]);
 };

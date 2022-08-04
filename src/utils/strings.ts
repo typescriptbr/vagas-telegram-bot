@@ -94,7 +94,7 @@ export const FORWARDED_OFFER = (offer: Offer) =>
   stripIndent(safeHtml)`
     Oi, <a href="tg://user?id=${offer.authorId}">${offer.authorName}</a>. Vi que você postou uma vaga, mas temos um <a href="${config.offerRulesUrl}">fluxo específico</a> pra isso aqui no canal.
 
-    Essa que você postou já foi enviada pra aprovação, mas das próximas vezes me envia ela no privado, seguindo o fluxo certinho, por favor :)
+    Essa que você postou já foi enviada pra aprovação, mas pras próximas pode me enviar a vaga no privado, por favor :)
 
     Se quiser acompanhar o status da aprovação, clica no botão aqui em baixo.
   `;
@@ -103,7 +103,7 @@ export const FORWARDED_OFFER_ADMIN = (offer: Offer, channelUrl: string) =>
   stripIndent`
     Oi, <a href="tg://user?id=${offer.authorId}">${offer.authorName}</a>. Vi que você postou uma vaga, mas temos um <a href="${config.offerRulesUrl}">fluxo específico</a> pra isso aqui no canal.
 
-    Essa que você postou já foi postada lá <a href="${channelUrl}">no canal</a>, mas das próximas vezes me envia ela no privado, seguindo o fluxo certinho, por favor :)
+    Essa que você postou já foi enviada lá <a href="${channelUrl}">pro canal</a>, mas pras próximas pode me enviar a vaga no privado, por favor :)
 `;
 
 export const STATUS = (status: Offer['status']) =>
