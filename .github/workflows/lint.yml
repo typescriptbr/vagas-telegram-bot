@@ -27,3 +27,15 @@ jobs:
         with:
           deno-version: vx.x.x
       - run: deno fmt --check
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Chekout code
+        uses: actions/checkout@v2
+      - name: Setup Deno
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: vx.x.x
+      - run: deno check src/server.ts
+      - run: deno check src/polling.ts
