@@ -1,4 +1,5 @@
-import { safeHtml, stripIndent } from 'https://cdn.esm.sh/v86/common-tags@1.8.0/deno/common-tags.js?dts';
+import { safeHtml } from 'x/deno_tags@1.8.0/tags/safeHtml.ts';
+import { stripIndent } from 'x/deno_tags@1.8.0/tags/stripIndent.ts';
 import type { Offer } from '../repositories/offers.ts';
 import { config } from './config.ts';
 
