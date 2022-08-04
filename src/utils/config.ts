@@ -1,15 +1,19 @@
-import { config as loadConfig } from 'deno/dotenv/mod.ts';
+const required = (env: string) => {
+  const value = Deno.env.get(env);
 
-const envs = await loadConfig({ safe: true });
+  if (!value) throw new Error(`missing requried environment variable ${env}`);
+
+  return value;
+};
 
 export const config = {
-  groupId: envs['GROUP_ID'],
-  channelId: envs['CHANNEL_ID'],
-  telegramToken: envs['TELEGRAM_TOKEN'],
-  telegramSecret: envs['TELEGRAM_SECRET'],
-  adminGroupId: envs['ADMIN_GROUP_ID'],
-  dbUri: envs['DB_URI'],
-  offerRulesUrl: envs['OFFER_RULES_URL'],
+  groupId: required('GROUP_ID'),
+  channelId: required('CHANNEL_ID'),
+  telegramToken: required('TELEGRAM_TOKEN'),
+  telegramSecret: required('TELEGRAM_SECRET'),
+  adminGroupId: required('ADMIN_GROUP_ID'),
+  dbUri: required('DB_URI'),
+  offerRulesUrl: required('OFFER_RULES_URL'),
 };
 
 export type AppConfig = typeof config;
