@@ -5,7 +5,12 @@ import { getBot } from './bot.ts';
 import { config } from './utils/config.ts';
 
 const bot = await getBot(config);
+const handleUpdate = webhookCallback(bot, 'std/http', { secretToken: config.telegramSecret });
 
 serve({
-  '/': webhookCallback(bot, 'std/http', { secretToken: config.telegramSecret }),
+  '/': (req) => {
+    if (req.method === 'POST') return handleUpdate(req);
+
+    return Response.json({ ok: true });
+  },
 });
