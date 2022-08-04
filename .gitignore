@@ -271,3 +271,4 @@ dist
 
 .vercel
 dist
+.envrc

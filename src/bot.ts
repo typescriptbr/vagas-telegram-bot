@@ -17,7 +17,6 @@ export type AppContext = Context & {
 };
 
 export async function getBot(config: AppConfig) {
-  console.log(`Bot config: ${JSON.stringify(config)}`);
   const bot = new Bot<AppContext>(config.telegramToken);
   bot.api.config.use(parseMode('HTML'));
 
